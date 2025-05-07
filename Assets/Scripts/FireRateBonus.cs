@@ -1,10 +1,21 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FireRateBonus : MonoBehaviour
 {
     public float speed = 2f; // Vitesse de déplacement
-    public int health = 5; // Points de vie du bonus
+    public int maxHealth = 5; // Points de vie du bonus
+    private int currentHealth;
     public float fireRateMultiplier = 4f; // Multiplicateur de cadence de tir
+    public GameObject m_self;
+    public TMP_Text healthText;
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthText();
+    }
 
     void Update()
     {
@@ -17,13 +28,14 @@ public class FireRateBonus : MonoBehaviour
         // Vérifier si le bonus est touché par une balle
         if (other.CompareTag("Bullet"))
         {
-            health--; // Réduire les PV du bonus
+            currentHealth--; // Réduire les PV du bonus
             Destroy(other.gameObject); // Détruire la balle après impact
+            UpdateHealthText();
 
-            if (health <= 0)
+            if (currentHealth <= 0)
             {
                 ActivatePowerUp(); // Activer le power-up
-                Destroy(gameObject); // Détruire le bonus
+                Destroy(m_self); // Détruire le bonus
             }
         }
     }
@@ -39,5 +51,13 @@ public class FireRateBonus : MonoBehaviour
         }
 
         Debug.Log("Power-up activé ! Cadence de tir augmentée.");
+    }
+
+    void UpdateHealthText()
+    {
+        if (healthText != null)
+        {
+            healthText.text = "PV : " + currentHealth;
+        }
     }
 }
