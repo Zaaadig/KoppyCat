@@ -9,6 +9,7 @@ public class BonusSoldats : MonoBehaviour
     public float initialRadius = 1f; // Rayon initial du cercle
     public float radiusIncrement = 0.5f; // Augmentation du rayon à chaque copie
     public float angleIncrement = 30f; // Angle entre chaque copie
+    public Transform refTransform;
 
     void Update()
     {
@@ -31,7 +32,7 @@ public class BonusSoldats : MonoBehaviour
         // Vérifier si le joueur touche le bonus
         if (other.CompareTag("Player"))
         {
-            SpawnPlayerCopies(other.transform);
+            SpawnPlayerCopies(refTransform.transform);
             Destroy(gameObject); // Détruire le bonus après activation
         }
     }
