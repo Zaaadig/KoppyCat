@@ -10,6 +10,7 @@ TagManager:
   - LeftBlocker
   - Detection
   - Boss
+  - ennemi
   layers:
   - Default
   - TransparentFX

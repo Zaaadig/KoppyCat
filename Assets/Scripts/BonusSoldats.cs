@@ -1,15 +1,24 @@
 using UnityEngine;
+using TMPro; // Ajout pour utiliser TextMeshPro
 
 public class BonusSoldats : MonoBehaviour
 {
     public float speed = 2f; // Vitesse de déplacement
-    public int value = 4; // Valeur de base du bonus
-    public int maxValue = 10; // Valeur maximale
-    public GameObject playerPrefab; // Référence au prefab du joueur
+    public int value = 4; // Nombre initial de soldats
+    public int maxValue = 10; // Nombre maximal de soldats
+    public GameObject playerPrefab; // Prefab du joueur
     public float initialRadius = 1f; // Rayon initial du cercle
-    public float radiusIncrement = 0.5f; // Augmentation du rayon à chaque copie
+    public float radiusIncrement = 0.5f; // Augmentation du rayon à chaque cercle
     public float angleIncrement = 30f; // Angle entre chaque copie
     public Transform refTransform;
+
+    // Nouveau : Référence au texte du Canvas
+    public TMP_Text soldierCountText;
+
+    private void Start()
+    {
+        UpdateSoldierText(); // Mettre à jour l'affichage au démarrage
+    }
 
     void Update()
     {
@@ -24,7 +33,8 @@ public class BonusSoldats : MonoBehaviour
         {
             if (value < maxValue)
             {
-                value++; // Augmenter la valeur du bonus
+                value++; // Augmenter le nombre de soldats
+                UpdateSoldierText(); // Mettre à jour l'affichage
             }
             Destroy(other.gameObject); // Détruire la balle après impact
         }
@@ -32,7 +42,7 @@ public class BonusSoldats : MonoBehaviour
         // Vérifier si le joueur touche le bonus
         if (other.CompareTag("Player"))
         {
-            SpawnPlayerCopies(refTransform.transform);
+            SpawnPlayerCopies(other.transform); // Utiliser le transform du joueur
             Destroy(gameObject); // Détruire le bonus après activation
         }
     }
@@ -59,6 +69,20 @@ public class BonusSoldats : MonoBehaviour
                 currentAngle -= 360f;
                 currentRadius += radiusIncrement;
             }
+        }
+
+        Debug.Log("Bonus activé ! " + value + " soldats invoqués.");
+    }
+
+    void UpdateSoldierText()
+    {
+        if (soldierCountText != null)
+        {
+            soldierCountText.text = "Soldats à invoquer : " + value;
+        }
+        else
+        {
+            Debug.LogWarning("SoldierCountText n'est pas assigné !");
         }
     }
 }
